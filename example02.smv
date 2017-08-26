@@ -1,0 +1,148 @@
+MODULE main
+VAR
+T1:boolean;
+T2:boolean;
+T3:boolean;
+T4:boolean;
+T5:boolean;
+T6:boolean;
+  
+C1:boolean;
+C2:boolean;
+C3:boolean;
+C4:boolean;
+C5:boolean;
+C6:boolean;
+  
+TRIG:{0
+,1
+,2
+,3
+,4
+,5
+,6
+};
+M1:{
+M1_S1,
+M1_S2,
+M1_S3,
+M1_S4,
+M1_S5 };
+M2:{
+M2_S1,
+M2_S2,
+M2_S3,
+M2_S4 };
+M3:{
+M3_S1,
+M3_S2 };
+M4:{
+M4_S1,
+M4_S2 };
+   
+ASSIGN
+init(M1) :=M1_S1;
+init(M2) :=M2_S1;
+init(M3) :=M3_S1;
+init(M4) :=M4_S1;
+   
+-- Add additonal conditions to set the triggers
+TRIG := case
+T1 = TRUE :1;
+T2 = TRUE :2;
+T3 = TRUE :3;
+T4 = TRUE :4;
+T5 = TRUE :5;
+T6 = TRUE :6;
+TRUE :0;
+esac;
+  
+next(M1):=case
+--1) If in State M1_S1 AND Trigger T2 occurs THEN transit to M1_S2 if condition C3 Is TRUE
+M1 = M1_S1 & (TRIG = 2) & C3 : M1_S2;
+--2) If in State M1_S2 AND Trigger T1 occurs THEN transit to M1_S1 if condition C2 Is TRUE
+M1 = M1_S2 & (TRIG = 1) & C2 : M1_S1;
+--3) If in State M1_S2 AND Trigger T2 occurs THEN transit to M1_S4 if condition C6 Is TRUE
+M1 = M1_S2 & (TRIG = 2) & C6 : M1_S4;
+--4) If in State M1_S2 AND Trigger T2 occurs THEN transit to M1_S3 if condition C5 Is TRUE
+M1 = M1_S2 & (TRIG = 2) & C5 : M1_S3;
+--5) If in State M1_S2 AND Trigger T2 occurs THEN remain in M1_S2 if condition C4 Is TRUE
+M1 = M1_S2 & (TRIG = 2) & C4 : M1_S2;
+--6) If in State M1_S2 AND Trigger T3 occurs THEN transit to M1_S4 if condition C6 Is TRUE
+M1 = M1_S2 & (TRIG = 3) & C6 : M1_S4;
+--7) If in State M1_S2 AND Trigger T3 occurs THEN transit to M1_S3 if condition C5 Is TRUE
+M1 = M1_S2 & (TRIG = 3) & C5 : M1_S3;
+--8) If in State M1_S2 AND Trigger T4 occurs THEN transit to M1_S3 if condition C1 Is TRUE
+M1 = M1_S2 & (TRIG = 4) & C1 : M1_S3;
+--9) If in State M1_S2 AND Trigger T6 occurs THEN transit to M1_S3 if condition C4 Is TRUE
+M1 = M1_S2 & (TRIG = 6) & C4 : M1_S3;
+--10) If in State M1_S3 AND Trigger T1 occurs THEN transit to M1_S1 if condition C2 Is TRUE
+M1 = M1_S3 & (TRIG = 1) & C2 : M1_S1;
+--11) If in State M1_S3 AND Trigger T2 occurs THEN transit to M1_S2 if condition C1 Is TRUE
+M1 = M1_S3 & (TRIG = 2) & C1 : M1_S2;
+--12) If in State M1_S3 AND Trigger T3 occurs THEN transit to M1_S2 if condition C4 Is TRUE
+M1 = M1_S3 & (TRIG = 3) & C4 : M1_S2;
+--13) If in State M1_S3 AND Trigger T4 occurs THEN transit to M1_S4 if condition C1 Is TRUE
+M1 = M1_S3 & (TRIG = 4) & C1 : M1_S4;
+--14) If in State M1_S4 AND Trigger T1 occurs THEN transit to M1_S1 if condition C2 Is TRUE
+M1 = M1_S4 & (TRIG = 1) & C2 : M1_S1;
+--15) If in State M1_S4 AND Trigger T2 occurs THEN transit to M1_S2 if condition C1 Is TRUE
+M1 = M1_S4 & (TRIG = 2) & C1 : M1_S2;
+--16) If in State M1_S4 AND Trigger T3 occurs THEN transit to M1_S2 if condition C4 Is TRUE
+M1 = M1_S4 & (TRIG = 3) & C4 : M1_S2;
+--17) If in State M1_S4 AND Trigger T4 occurs THEN transit to M1_S5 if condition C1 Is TRUE
+M1 = M1_S4 & (TRIG = 4) & C1 : M1_S5;
+--18) If in State M1_S5 AND Trigger T1 occurs THEN transit to M1_S1 if condition C2 Is TRUE
+M1 = M1_S5 & (TRIG = 1) & C2 : M1_S1;
+--19) If in State M1_S5 AND Trigger T4 occurs THEN transit to M1_S2 if condition C1 Is TRUE
+M1 = M1_S5 & (TRIG = 4) & C1 : M1_S2;
+TRUE :M1;
+esac;
+  
+next(M2):=case
+--20) If in State M2_S1 AND Trigger T2 occurs THEN transit to M2_S2 if condition C3 Is TRUE
+M2 = M2_S1 & (TRIG = 2) & C3 : M2_S2;
+--21) If in State M2_S2 AND Trigger T1 occurs THEN transit to M2_S1 if condition C2 Is TRUE
+M2 = M2_S2 & (TRIG = 1) & C2 : M2_S1;
+--22) If in State M2_S2 AND Trigger T4 occurs THEN remain in M2_S2 if condition C1 Is TRUE
+M2 = M2_S2 & (TRIG = 4) & C1 : M2_S2;
+--23) If in State M2_S3 AND Trigger T1 occurs THEN transit to M2_S1 if condition C2 Is TRUE
+M2 = M2_S3 & (TRIG = 1) & C2 : M2_S1;
+--24) If in State M2_S3 AND Trigger T4 occurs THEN transit to M2_S4 if condition C1 Is TRUE
+M2 = M2_S3 & (TRIG = 4) & C1 : M2_S4;
+--25) If in State M2_S4 AND Trigger T1 occurs THEN transit to M2_S1 if condition C2 Is TRUE
+M2 = M2_S4 & (TRIG = 1) & C2 : M2_S1;
+--26) If in State M2_S4 AND Trigger T4 occurs THEN transit to M2_S2 if condition C1 Is TRUE
+M2 = M2_S4 & (TRIG = 4) & C1 : M2_S2;
+TRUE :M2;
+esac;
+  
+next(M3):=case
+--27) If in State M3_S1 AND Trigger T2 occurs THEN transit to M3_S2 if condition C3 Is TRUE
+M3 = M3_S1 & (TRIG = 2) & C3 : M3_S2;
+--28) If in State M3_S1 AND Trigger T5 occurs THEN transit to M3_S2 if condition C5 Is TRUE
+M3 = M3_S1 & (TRIG = 5) & C5 : M3_S2;
+--29) If in State M3_S2 AND Trigger T1 occurs THEN transit to M3_S1 if condition C2 Is TRUE
+M3 = M3_S2 & (TRIG = 1) & C2 : M3_S1;
+--30) If in State M3_S2 AND Trigger T5 occurs THEN transit to M3_S1 if condition C1 Is TRUE
+M3 = M3_S2 & (TRIG = 5) & C1 : M3_S1;
+TRUE :M3;
+esac;
+  
+next(M4):=case
+--31) If in State M4_S1 AND Trigger T2 occurs THEN transit to M4_S2 if condition C3 Is TRUE
+M4 = M4_S1 & (TRIG = 2) & C3 : M4_S2;
+--32) If in State M4_S1 AND Trigger T5 occurs THEN transit to M4_S2 if condition C6 Is TRUE
+M4 = M4_S1 & (TRIG = 5) & C6 : M4_S2;
+--33) If in State M4_S2 AND Trigger T1 occurs THEN transit to M4_S1 if condition C2 Is TRUE
+M4 = M4_S2 & (TRIG = 1) & C2 : M4_S1;
+--34) If in State M4_S2 AND Trigger T5 occurs THEN transit to M4_S1 if condition C1 Is TRUE
+M4 = M4_S2 & (TRIG = 5) & C1 : M4_S1;
+TRUE :M4;
+esac;
+  
+  
+-- ==============
+  
+-- Put LTLSPEC here - Example
+LTLSPEC G (( M1 = M1_S5 ) -> M2 = M2_S2)

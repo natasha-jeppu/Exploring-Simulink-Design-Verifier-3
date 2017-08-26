@@ -1,0 +1,159 @@
+MODULE main
+VAR
+tAPFAIL:boolean;
+tAP:boolean;
+tALTCPDN:boolean;
+tALTCAP:boolean;
+tALT:boolean;
+tALTS:boolean;
+tSPD:boolean;
+tVS:boolean;
+  
+C1:boolean;
+C2:boolean;
+C3:boolean;
+C4:boolean;
+C5:boolean;
+  
+TRIG:{0
+,1
+,2
+,3
+,4
+,5
+,6
+,7
+,8
+};
+Vm:{
+DIS,
+PAH,
+SPD_HOLD,
+VS,
+ALT_HOLD,
+ALTS_CAP };
+APm:{
+APON,
+APOFF };
+ASm:{
+ALTSOFF,
+ALTSARM,
+ALTSCAP };
+   
+ASSIGN
+init(Vm) :=DIS;
+init(APm) :=APON;
+init(ASm) :=ALTSOFF;
+   
+-- Add additonal conditions to set the triggers
+TRIG := case
+tAPFAIL = TRUE :1;
+tAP = TRUE :2;
+tALTCPDN = TRUE :3;
+tALTCAP = TRUE :4;
+tALT = TRUE :5;
+tALTS = TRUE :6;
+tSPD = TRUE :7;
+tVS = TRUE :8;
+TRUE :0;
+esac;
+  
+next(Vm):=case
+--1) If in State DIS AND Trigger tAP occurs THEN transit to PAH if condition C1 Is TRUE
+Vm = DIS & (TRIG = 2) & C1 : PAH;
+--2) If in State PAH AND Trigger tAPFAIL occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = PAH & (TRIG = 1) & C2 : DIS;
+--3) If in State PAH AND Trigger tAP occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = PAH & (TRIG = 2) & C2 : DIS;
+--4) If in State PAH AND Trigger tALTCAP occurs THEN transit to ALTS_CAP if condition  [No Condition required]  Is TRUE
+Vm = PAH & (TRIG = 4)  : ALTS_CAP;
+--5) If in State PAH AND Trigger tALT occurs THEN transit to ALT_HOLD if condition C5 Is TRUE
+Vm = PAH & (TRIG = 5) & C5 : ALT_HOLD;
+--6) If in State PAH AND Trigger tSPD occurs THEN transit to SPD_HOLD if condition C3 Is TRUE
+Vm = PAH & (TRIG = 7) & C3 : SPD_HOLD;
+--7) If in State PAH AND Trigger tVS occurs THEN transit to VS if condition C4 Is TRUE
+Vm = PAH & (TRIG = 8) & C4 : VS;
+--8) If in State SPD_HOLD AND Trigger tAPFAIL occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = SPD_HOLD & (TRIG = 1) & C2 : DIS;
+--9) If in State SPD_HOLD AND Trigger tAP occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = SPD_HOLD & (TRIG = 2) & C2 : DIS;
+--10) If in State SPD_HOLD AND Trigger tALTCAP occurs THEN transit to ALTS_CAP if condition  [No Condition required]  Is TRUE
+Vm = SPD_HOLD & (TRIG = 4)  : ALTS_CAP;
+--11) If in State SPD_HOLD AND Trigger tALT occurs THEN transit to ALT_HOLD if condition C5 Is TRUE
+Vm = SPD_HOLD & (TRIG = 5) & C5 : ALT_HOLD;
+--12) If in State SPD_HOLD AND Trigger tSPD occurs THEN transit to PAH if condition  [No Condition required]  Is TRUE
+Vm = SPD_HOLD & (TRIG = 7)  : PAH;
+--13) If in State SPD_HOLD AND Trigger tVS occurs THEN transit to VS if condition C4 Is TRUE
+Vm = SPD_HOLD & (TRIG = 8) & C4 : VS;
+--14) If in State VS AND Trigger tAPFAIL occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = VS & (TRIG = 1) & C2 : DIS;
+--15) If in State VS AND Trigger tAP occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = VS & (TRIG = 2) & C2 : DIS;
+--16) If in State VS AND Trigger tALTCAP occurs THEN transit to ALTS_CAP if condition  [No Condition required]  Is TRUE
+Vm = VS & (TRIG = 4)  : ALTS_CAP;
+--17) If in State VS AND Trigger tALT occurs THEN transit to ALT_HOLD if condition C5 Is TRUE
+Vm = VS & (TRIG = 5) & C5 : ALT_HOLD;
+--18) If in State VS AND Trigger tSPD occurs THEN transit to SPD_HOLD if condition C3 Is TRUE
+Vm = VS & (TRIG = 7) & C3 : SPD_HOLD;
+--19) If in State VS AND Trigger tVS occurs THEN transit to PAH if condition  [No Condition required]  Is TRUE
+Vm = VS & (TRIG = 8)  : PAH;
+--20) If in State ALT_HOLD AND Trigger tAPFAIL occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = ALT_HOLD & (TRIG = 1) & C2 : DIS;
+--21) If in State ALT_HOLD AND Trigger tAP occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = ALT_HOLD & (TRIG = 2) & C2 : DIS;
+--22) If in State ALT_HOLD AND Trigger tALT occurs THEN transit to PAH if condition  [No Condition required]  Is TRUE
+Vm = ALT_HOLD & (TRIG = 5)  : PAH;
+--23) If in State ALT_HOLD AND Trigger tSPD occurs THEN transit to SPD_HOLD if condition C3 Is TRUE
+Vm = ALT_HOLD & (TRIG = 7) & C3 : SPD_HOLD;
+--24) If in State ALT_HOLD AND Trigger tVS occurs THEN transit to VS if condition C4 Is TRUE
+Vm = ALT_HOLD & (TRIG = 8) & C4 : VS;
+--25) If in State ALTS_CAP AND Trigger tAPFAIL occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = ALTS_CAP & (TRIG = 1) & C2 : DIS;
+--26) If in State ALTS_CAP AND Trigger tAP occurs THEN transit to DIS if condition C2 Is TRUE
+Vm = ALTS_CAP & (TRIG = 2) & C2 : DIS;
+--27) If in State ALTS_CAP AND Trigger tALTCPDN occurs THEN transit to ALT_HOLD if condition  [No Condition required]  Is TRUE
+Vm = ALTS_CAP & (TRIG = 3)  : ALT_HOLD;
+--28) If in State ALTS_CAP AND Trigger tALT occurs THEN transit to ALT_HOLD if condition C5 Is TRUE
+Vm = ALTS_CAP & (TRIG = 5) & C5 : ALT_HOLD;
+TRUE :Vm;
+esac;
+  
+next(APm):=case
+--29) If in State APON AND Trigger tAPFAIL occurs THEN transit to APOFF if condition  [No Condition required]  Is TRUE
+APm = APON & (TRIG = 1)  : APOFF;
+--30) If in State APON AND Trigger tAP occurs THEN transit to APOFF if condition  [No Condition required]  Is TRUE
+APm = APON & (TRIG = 2)  : APOFF;
+--31) If in State APOFF AND Trigger tAP occurs THEN transit to APON if condition C1 Is TRUE
+APm = APOFF & (TRIG = 2) & C1 : APON;
+TRUE :APm;
+esac;
+  
+next(ASm):=case
+--32) If in State ALTSOFF AND Trigger tALTS occurs THEN transit to ALTSARM if condition  [No Condition required]  Is TRUE
+ASm = ALTSOFF & (TRIG = 6)  : ALTSARM;
+--33) If in State ALTSARM AND Trigger tAPFAIL occurs THEN transit to ALTSOFF if condition C2 Is TRUE
+ASm = ALTSARM & (TRIG = 1) & C2 : ALTSOFF;
+--34) If in State ALTSARM AND Trigger tAP occurs THEN transit to ALTSOFF if condition C2 Is TRUE
+ASm = ALTSARM & (TRIG = 2) & C2 : ALTSOFF;
+--35) If in State ALTSARM AND Trigger tALTCAP occurs THEN transit to ALTSCAP if condition  [No Condition required]  Is TRUE
+ASm = ALTSARM & (TRIG = 4)  : ALTSCAP;
+--36) If in State ALTSARM AND Trigger tALT occurs THEN transit to ALTSOFF if condition C5 Is TRUE
+ASm = ALTSARM & (TRIG = 5) & C5 : ALTSOFF;
+--37) If in State ALTSARM AND Trigger tALTS occurs THEN transit to ALTSOFF if condition  [No Condition required]  Is TRUE
+ASm = ALTSARM & (TRIG = 6)  : ALTSOFF;
+--38) If in State ALTSCAP AND Trigger tAPFAIL occurs THEN transit to ALTSOFF if condition C2 Is TRUE
+ASm = ALTSCAP & (TRIG = 1) & C2 : ALTSOFF;
+--39) If in State ALTSCAP AND Trigger tAP occurs THEN transit to ALTSOFF if condition C2 Is TRUE
+ASm = ALTSCAP & (TRIG = 2) & C2 : ALTSOFF;
+--40) If in State ALTSCAP AND Trigger tALTCPDN occurs THEN transit to ALTSOFF if condition  [No Condition required]  Is TRUE
+ASm = ALTSCAP & (TRIG = 3)  : ALTSOFF;
+--41) If in State ALTSCAP AND Trigger tALT occurs THEN transit to ALTSOFF if condition C5 Is TRUE
+ASm = ALTSCAP & (TRIG = 5) & C5 : ALTSOFF;
+TRUE :ASm;
+esac;
+  
+  
+-- ==============
+  
+-- Put LTLSPEC here - Example
+LTLSPEC G (( Vm = ALT_HOLD ) -> ASm = ALTSOFF)
